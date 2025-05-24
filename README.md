@@ -29,3 +29,22 @@ Le système utilise une approche multi-sources avec fallback automatique :
 - Format de stockage : JSON avec structure {date, price, source}
 - Gestion d'erreurs : Système de fallback entre sources
 - Headers HTTP : Simulation de navigateur pour éviter le blocage
+
+## Limitations éventuelles
+### Qualité des données
+- Dépendance aux APIs externes : Risque d'indisponibilité ou de changement de format
+- Données manquantes : Weekends et jours fériés non inclus dans les données de trading
+- Précision des prix : Arrondi à 4 décimales, peut introduire de légères imprécisions
+- Symboles multiples : L'ETF est coté sur plusieurs bourses, risque de divergence de prix
+
+### Fréquence et actualisation
+- Pas de mise à jour automatique : Nécessite une exécution manuelle du script
+- Délai de publication : Les données peuvent avoir 1 jour de retard
+- Limites API : Yahoo Finance peut limiter le nombre de requêtes
+
+## Fichiers de sortie
+Le système génère automatiquement :
+
+- analyse_opcvm_complete.csv : Résultats tabulaires
+- analyse_opcvm_complete.json : Données structurées
+- opcvm_data.json : Données historiques brutes
