@@ -32,7 +32,6 @@ class FinancialCalculator:
         # Tri par date croissante
         self.data.sort(key=lambda x: x['date'])
         
-        print(f"📊 Données chargées: {len(self.data)} points")
         print(f"   Période: {self.data[0]['date'].strftime('%Y-%m-%d')} → {self.data[-1]['date'].strftime('%Y-%m-%d')}")
     
     def get_period_dates(self):
@@ -118,7 +117,6 @@ class FinancialCalculator:
     def calculate_expected_return(self, period_data):
         """
         Calcule le rendement espéré annualisé en pourcentage
-        Rendement espéré = Moyenne des rendements quotidiens × 252 × 100
         """
         daily_returns = self.calculate_daily_returns(period_data)
         
@@ -136,7 +134,6 @@ class FinancialCalculator:
     def calculate_max_drawdown(self, period_data):
         """
         Calcule le Maximum Drawdown en pourcentage
-        Max DD = Plus grande baisse depuis un pic précédent
         """
         if len(period_data) < 2:
             return 0.0
@@ -165,13 +162,13 @@ class FinancialCalculator:
         """
         Analyse complète d'une période
         """
-        print(f"   📈 Analyse {period_name}...")
+        print(f"   Analyse {period_name}...")
         
         # Filtrage des données
         period_data = self.filter_data_by_period(start_date)
         
         if len(period_data) < 2:
-            print(f"      ⚠️  Données insuffisantes pour {period_name}")
+            print(f"Données insuffisantes pour {period_name}")
             return None
         
         # Calcul des métriques
@@ -197,8 +194,7 @@ class FinancialCalculator:
         """
         Analyse toutes les périodes définies
         """
-        print("🔬 DÉBUT DE L'ANALYSE FINANCIÈRE")
-        print("=" * 50)
+
         
         periods = self.get_period_dates()
         results = {}
@@ -208,47 +204,22 @@ class FinancialCalculator:
             
             if metrics:
                 results[period_name] = metrics
-                print(f"      ✅ Performance: {metrics['performance']:.2f}%")
-                print(f"      ✅ Volatilité: {metrics['volatilite']:.2f}%")
-                print(f"      ✅ Rendement espéré: {metrics['rendement_espere']:.2f}%")
-                print(f"      ✅ Max Drawdown: {metrics['max_drawdown']:.2f}%")
+                print(f"Performance: {metrics['performance']:.2f}%")
+                print(f"Volatilité: {metrics['volatilite']:.2f}%")
+                print(f"Rendement espéré: {metrics['rendement_espere']:.2f}%")
+                print(f"Max Drawdown: {metrics['max_drawdown']:.2f}%")
                 print()
         
         return results
     
-    def display_results_table(self, results):
-        """
-        Affiche les résultats sous forme de tableau
-        """
-        if not results:
-            print("❌ Aucun résultat à afficher")
-            return
-        
-        print("📊 TABLEAU DE RÉSULTATS")
-        print("=" * 80)
-        
-        # En-tête du tableau
-        print(f"{'Période':<8} {'Performance':<12} {'Volatilité':<12} {'Rdt Espéré':<12} {'Max DD':<10} {'Prix Début':<11} {'Prix Fin':<10}")
-        print("-" * 80)
-        
-        # Données
-        for period, metrics in results.items():
-            print(f"{period:<8} "
-                  f"{metrics['performance']:>10.2f}% "
-                  f"{metrics['volatilite']:>10.2f}% "
-                  f"{metrics['rendement_espere']:>10.2f}% "
-                  f"{metrics['max_drawdown']:>8.2f}% "
-                  f"{metrics['prix_debut']:>10.2f} "
-                  f"{metrics['prix_fin']:>9.2f}")
-        
-        print("=" * 80)
+    
     
     def export_to_csv(self, results, filename="analyse_financiere.csv"):
         """
         Exporte les résultats vers un fichier CSV
         """
         if not results:
-            print("❌ Aucune donnée à exporter")
+            print("Aucune donnée à exporter")
             return
         
         try:
@@ -267,17 +238,17 @@ class FinancialCalculator:
                     row.update(metrics)
                     writer.writerow(row)
             
-            print(f"💾 Résultats exportés vers {filename}")
+            print(f"Résultats exportés vers {filename}")
             
         except Exception as e:
-            print(f"❌ Erreur export CSV: {e}")
+            print(f"Erreur export CSV: {e}")
     
     def export_to_json(self, results, filename="analyse_financiere.json"):
         """
         Exporte les résultats vers un fichier JSON
         """
         if not results:
-            print("❌ Aucune donnée à exporter")
+            print("Aucune donnée à exporter")
             return
         
         try:
@@ -300,8 +271,8 @@ class FinancialCalculator:
             with open(filename, 'w', encoding='utf-8') as jsonfile:
                 json.dump(rapport, jsonfile, indent=2, ensure_ascii=False)
             
-            print(f"💾 Rapport complet exporté vers {filename}")
+            print(f"Rapport complet exporté vers {filename}")
             
         except Exception as e:
-            print(f"❌ Erreur export JSON: {e}")
+            print(f"Erreur export JSON: {e}")
 

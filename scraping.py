@@ -25,10 +25,9 @@ class OPCVMScraper:
     
     def scrape_yahoo_finance(self):
         """
-        Méthode 1: Yahoo Finance API (le plus fiable)
-        Modifiée pour récupérer 3 ans d'historique
+        Méthode 1: Yahoo Finance API 
         """
-        print("🔍 Tentative avec Yahoo Finance...")
+        print("Tentative avec Yahoo Finance...")
         
         # Symboles possibles pour cet ETF
         symbols = ["IWDA.AS", "IWDA.L", "IWDA.DE", "IWDA.MI"]
@@ -73,7 +72,7 @@ class OPCVMScraper:
                                 })
                         
                         if historical_data:
-                            print(f"✅ Données trouvées: {len(historical_data)} points")
+                            print(f"Données trouvées: {len(historical_data)} points")
                             print(f"   Période: {historical_data[0]['date']} à {historical_data[-1]['date']}")
                             return historical_data
                 
@@ -81,15 +80,15 @@ class OPCVMScraper:
                 print(f"   Erreur avec {symbol}: {e}")
                 continue
         
-        print("❌ Échec Yahoo Finance")
+        print("Échec Yahoo Finance")
         return None
     
     def scrape_investing_com(self):
         """
-        Méthode 2: Investing.com (alternative)
-        Modifiée pour récupérer 3 ans d'historique
+        Méthode 2: Investing.com 
+        
         """
-        print("🔍 Tentative avec Investing.com...")
+        print(" Tentative avec Investing.com...")
         
         try:
             # URL pour l'ETF IWDA sur Investing.com
@@ -100,7 +99,7 @@ class OPCVMScraper:
                 'Referer': base_url
             }
             
-            # Paramètres pour récupérer les données historiques (3 ans)
+            # Paramètres pour récupérer les données historiques 
             data = {
                 'curr_id': '997650',  # ID de l'ETF IWDA
                 'smlID': '300004',
@@ -124,119 +123,21 @@ class OPCVMScraper:
                 # Parse HTML response (simplifié)
                 content = response.text
                 if 'table' in content and 'data-test="historical-data-table"' in content:
-                    print("✅ Données HTML récupérées d'Investing.com")
+                    print("Données HTML récupérées d'Investing.com")
                     # Ici on pourrait parser le HTML, mais c'est plus complexe
                     return []
             
         except Exception as e:
-            print(f"❌ Erreur Investing.com: {e}")
+            print(f"Erreur Investing.com: {e}")
         
         return None
     
-    def scrape_alphavantage(self):
-        """
-        Méthode 3: Alpha Vantage (nécessite une clé API gratuite)
-        Modifiée pour récupérer plus de données
-        """
-        print("🔍 Tentative avec Alpha Vantage...")
-        
-        # Clé API gratuite (limitée à 5 requêtes/minute)
-        api_key = "demo"  # Remplacez par votre clé gratuite
-        symbol = "IWDA.LON"  # Symbole London Stock Exchange
-        
-        try:
-            url = "https://www.alphavantage.co/query"
-            params = {
-                'function': 'TIME_SERIES_DAILY',
-                'symbol': symbol,
-                'apikey': api_key,
-                'outputsize': 'full'  # Changé de 'compact' à 'full' pour plus de données
-            }
-            
-            response = self.session.get(url, params=params, timeout=self.timeout)
-            
-            if response.status_code == 200:
-                data = response.json()
-                
-                if 'Time Series (Daily)' in data:
-                    time_series = data['Time Series (Daily)']
-                    
-                    # Filtre pour les 3 dernières années
-                    three_years_ago = datetime.now() - timedelta(days=1095)
-                    
-                    historical_data = []
-                    for date_str, values in time_series.items():
-                        date_obj = datetime.strptime(date_str, '%Y-%m-%d')
-                        if date_obj >= three_years_ago:
-                            historical_data.append({
-                                'date': date_str,
-                                'price': round(float(values['4. close']), 4),
-                                'source': 'Alpha Vantage'
-                            })
-                    
-                    if historical_data:
-                        print(f"✅ Données Alpha Vantage: {len(historical_data)} points")
-                        print(f"   Période: {min(historical_data, key=lambda x: x['date'])['date']} à {max(historical_data, key=lambda x: x['date'])['date']}")
-                        return sorted(historical_data, key=lambda x: x['date'])
-                
-        except Exception as e:
-            print(f"❌ Erreur Alpha Vantage: {e}")
-        
-        return None
-    
-    def scrape_marketstack(self):
-        """
-        Méthode 4: Marketstack API (gratuit avec limite)
-        Modifiée pour récupérer 3 ans d'historique
-        """
-        print("🔍 Tentative avec Marketstack...")
-        
-        try:
-            # API gratuite (1000 requêtes/mois)
-            api_key = "YOUR_FREE_API_KEY"  # Inscrivez-vous sur marketstack.com
-            
-            url = "http://api.marketstack.com/v1/eod"
-            params = {
-                'access_key': api_key,
-                'symbols': 'IWDA.XAMS',  # Amsterdam
-                'limit': 1000,  # Augmenté pour couvrir 3 ans (environ 780 jours ouvrés)
-                'sort': 'DESC'
-            }
-            
-            response = self.session.get(url, params=params, timeout=self.timeout)
-            
-            if response.status_code == 200:
-                data = response.json()
-                
-                if 'data' in data:
-                    # Filtre pour les 3 dernières années
-                    three_years_ago = datetime.now() - timedelta(days=1095)
-                    
-                    historical_data = []
-                    for item in data['data']:
-                        item_date = datetime.strptime(item['date'][:10], '%Y-%m-%d')
-                        if item_date >= three_years_ago:
-                            historical_data.append({
-                                'date': item['date'][:10],  # Format YYYY-MM-DD
-                                'price': round(float(item['close']), 4),
-                                'source': 'Marketstack'
-                            })
-                    
-                    if historical_data:
-                        print(f"✅ Données Marketstack: {len(historical_data)} points")
-                        print(f"   Période: {min(historical_data, key=lambda x: x['date'])['date']} à {max(historical_data, key=lambda x: x['date'])['date']}")
-                        return historical_data
-                
-        except Exception as e:
-            print(f"❌ Erreur Marketstack: {e}")
-        
-        return None
     
     def get_fund_info(self):
         """
         Récupère les informations de base du fonds
         """
-        print("📋 Récupération des informations du fonds...")
+        print("Récupération des informations du fonds...")
         
         fund_info = {
             'isin': self.isin,
@@ -255,8 +156,7 @@ class OPCVMScraper:
         """
         Essaie toutes les sources et retourne la première qui fonctionne
         """
-        print(f"🚀 Début du scraping pour l'ISIN: {self.isin}")
-        print("🎯 Objectif: 3 ans d'historique")
+        print(f"Début du scraping pour l'ISIN: {self.isin}")
         print("="*60)
         
         # Informations du fonds
@@ -265,8 +165,6 @@ class OPCVMScraper:
         # Essai des différentes sources
         sources = [
             self.scrape_yahoo_finance,
-            self.scrape_alphavantage,
-            self.scrape_marketstack,
             self.scrape_investing_com
         ]
         
@@ -280,31 +178,30 @@ class OPCVMScraper:
                     newest_date = max(dates)
                     period_covered = (newest_date - oldest_date).days
                     
-                    print(f"🎉 Scraping réussi!")
-                    print(f"📅 Période couverte: {period_covered} jours ({period_covered/365:.1f} ans)")
+                    print(f"Scraping réussi!")
+                    print(f"Période couverte: {period_covered} jours ({period_covered/365:.1f} ans)")
                     
                     return {
                         'fund_info': fund_info,
                         'historical_data': sorted(data, key=lambda x: x['date']),
-                        'nb_points': len(data),
                         'date_debut': oldest_date.strftime('%Y-%m-%d'),
                         'date_fin': newest_date.strftime('%Y-%m-%d'),
                         'periode_jours': period_covered,
                         'periode_annees': round(period_covered/365, 1)
                     }
             except Exception as e:
-                print(f"❌ Erreur avec une source: {e}")
+                print(f"Erreur avec une source: {e}")
                 continue
         
-        print("❌ Échec de toutes les sources")
+        print("Échec de toutes les sources")
         return None
     
-    def save_to_csv(self, result, filename="opcvm_data_3ans.csv"):
+    def save_to_csv(self, result, filename="opcvm_data.csv"):
         """
         Sauvegarde les données en CSV
         """
         if not result or not result.get('historical_data'):
-            print("❌ Aucune donnée à sauvegarder")
+            print("Aucune donnée à sauvegarder")
             return
         
         try:
@@ -316,34 +213,33 @@ class OPCVMScraper:
                 for row in result['historical_data']:
                     writer.writerow(row)
             
-            print(f"💾 Données sauvées dans {filename}")
+            print(f"Données sauvées dans {filename}")
             
         except Exception as e:
-            print(f"❌ Erreur sauvegarde CSV: {e}")
+            print(f"Erreur sauvegarde CSV: {e}")
     
-    def save_to_json(self, result, filename="opcvm_data_3ans.json"):
+    def save_to_json(self, result, filename="opcvm_data.json"):
         """
         Sauvegarde les données en JSON
         """
         if not result:
-            print("❌ Aucune donnée à sauvegarder")
+            print("Aucune donnée à sauvegarder")
             return
         
         try:
             with open(filename, 'w', encoding='utf-8') as jsonfile:
                 json.dump(result, jsonfile, indent=2, ensure_ascii=False)
             
-            print(f"💾 Données sauvées dans {filename}")
+            print(f"Données enregsitées dans {filename}")
             
         except Exception as e:
-            print(f"❌ Erreur sauvegarde JSON: {e}")
+            print(f"Erreur sauvegarde JSON: {e}")
 
 def main():
     """
     Fonction principale de test
     """
-    print("🏦 SCRAPER OPCVM - iShares Core MSCI World")
-    print("🎯 Version 3 ans d'historique")
+    print("SCRAPER OPCVM")
     print("="*60)
     
     # Création du scraper
@@ -353,33 +249,22 @@ def main():
     result = scraper.scrape_all_sources()
     
     if result:
-        print("\n📊 RÉSULTATS:")
+        print("\n RÉSULTATS:")
         print(f"   Fonds: {result['fund_info']['nom']}")
         print(f"   ISIN: {result['fund_info']['isin']}")
-        print(f"   Points de données: {result['nb_points']}")
         print(f"   Période: {result['date_debut']} à {result['date_fin']}")
         print(f"   Durée: {result['periode_jours']} jours ({result['periode_annees']} ans)")
         print(f"   Source: {result['historical_data'][0]['source']}")
         
-        # Affichage des derniers prix
-        print("\n💰 DERNIERS PRIX:")
-        for i, data_point in enumerate(result['historical_data'][-5:]):
-            print(f"   {data_point['date']}: {data_point['price']} €")
-        
-        # Affichage des premiers prix (pour vérifier l'ancienneté)
-        print("\n📈 PREMIERS PRIX (les plus anciens):")
-        for i, data_point in enumerate(result['historical_data'][:5]):
-            print(f"   {data_point['date']}: {data_point['price']} €")
         
         # Sauvegarde
         scraper.save_to_csv(result)
         scraper.save_to_json(result)
         
-        print("\n✅ Scraping terminé avec succès!")
+        print("\n Scraping terminé avec succès!")
         
     else:
-        print("\n❌ Impossible de récupérer les données")
-        print("Vérifiez votre connexion internet et réessayez")
+        print("\n Impossible de récupérer les données")
 
 if __name__ == "__main__":
     main()
