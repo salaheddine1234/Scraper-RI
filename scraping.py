@@ -1,7 +1,6 @@
 """
-Scraper simple pour récupérer les données de l'OPCVM IE0002XZSHO1
-(iShares Core MSCI World UCITS ETF)
-Modifié pour récupérer 3 ans d'historique
+Scraper pour récupérer les données de l'OPCVM IE0002XZSHO1
+
 """
 import requests
 import json
@@ -137,7 +136,6 @@ class OPCVMScraper:
         """
         Récupère les informations de base du fonds
         """
-        print("Récupération des informations du fonds...")
         
         fund_info = {
             'isin': self.isin,

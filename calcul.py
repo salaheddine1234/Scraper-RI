@@ -96,8 +96,7 @@ class FinancialCalculator:
     def calculate_volatility(self, period_data):
         """
         Calcule la volatilité annualisée en pourcentage
-        Volatilité = Écart-type des rendements quotidiens × √252 × 100
-        (252 = nombre de jours de trading par an)
+        
         """
         daily_returns = self.calculate_daily_returns(period_data)
         
