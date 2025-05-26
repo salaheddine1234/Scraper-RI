@@ -27,7 +27,6 @@ Analyse automatisée de la performance d’un OPCVM sur 3 ans à partir de donn�
 - Pas de mise à jour automatique : Nécessite une exécution manuelle du script
 - Limites API : Yahoo Finance peut limiter le nombre de requêtes
 
-\text{Performance (\%)} = \frac{\text{Prix final} - \text{Prix initial}}{\text{Prix initial}} \times 100
-
+Perf=Prix initialPrix final−Prix initial​×100
 
 
