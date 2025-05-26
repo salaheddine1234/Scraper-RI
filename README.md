@@ -6,11 +6,12 @@ Analyse automatisée de la performance d’un OPCVM sur 3 ans à partir de donn�
 ## Fonctionnement
 1. Collecte : Téléchargement de l’historique des prix via Yahoo Finance.
 2. Calculs : Application des formules suivantes :
-   - Performance (%) : ( \text{Perf} = \frac{\text{Prix final} - \text{Prix initial}}{\text{Prix initial}} \times 100 )
-   - Rendement quotidien : ( r_t = \frac{P_t}{P_{t-1}} - 1 )
-   - Volatilité annualisée (%) : ( \sigma_{ann} = \text{Écart-type}(r) \times \sqrt{252} \times 100 )
-   - Rendement espéré annualisé (%) : ( \mu_{ann} = \text{Moyenne}(r) \times 252 \times 100 )
-   - Max Drawdown (%) : ( \max\left(\frac{\text{Creux} - \text{Pic}}{\text{Pic}}\right) \times 100 )
+   - Performance (%) : ![equation](https://latex.codecogs.com/svg.latex?\text{Perf}%20=%20\frac{\text{Prix%20final}%20-%20\text{Prix%20initial}}{\text{Prix%20initial}}%20\times%20100)
+
+   - Rendement quotidien : ![equation](https://latex.codecogs.com/svg.latex?r_t%20=%20%5Cfrac%7BP_t%7D%7BP_%7Bt-1%7D%7D%20-%201)
+   - Volatilité annualisée (%) : ![equation](https://latex.codecogs.com/svg.latex?%5Csigma_%7Bann%7D%20=%20%5Ctext%7B%C3%89cart-type%7D(r)%20%5Ctimes%20%5Csqrt%7B252%7D%20%5Ctimes%20100)
+   - Rendement espéré annualisé (%) : ![equation](https://latex.codecogs.com/svg.latex?%5Cmu_%7Bann%7D%20=%20%5Ctext%7BMoyenne%7D(r)%20%5Ctimes%20252%20%5Ctimes%20100)
+   - Max Drawdown (%) : ![equation](https://latex.codecogs.com/svg.latex?%5Cmax%5Cleft(%5Cfrac%7B%5Ctext%7BCreux%7D%20-%20%5Ctext%7BPic%7D%7D%7B%5Ctext%7BPic%7D%7D%5Cright)%20%5Ctimes%20100)
 3. Rapport : Résultats affichés, exportables en CSV/JSON.
 ## Fichiers
 - scraping.py : Collecte des données.
@@ -27,5 +28,4 @@ Analyse automatisée de la performance d’un OPCVM sur 3 ans à partir de donn�
 - Pas de mise à jour automatique : Nécessite une exécution manuelle du script
 - Limites API : Yahoo Finance peut limiter le nombre de requêtes
 
-![equation](https://latex.codecogs.com/svg.latex?\text{Perf}%20=%20\frac{\text{Prix%20final}%20-%20\text{Prix%20initial}}{\text{Prix%20initial}}%20\times%20100)
-![equation](https://latex.codecogs.com/svg.latex?%5Ctext%7BPerf%7D%20=%20%5Cfrac%7B%5Ctext%7BPrix%20final%7D%20-%20%5Ctext%7BPrix%20initial%7D%7D%7B%5Ctext%7BPrix%20initial%7D%7D%20%5Ctimes%20100)
+
