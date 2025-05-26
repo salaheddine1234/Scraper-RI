@@ -28,4 +28,4 @@ Analyse automatisée de la performance d’un OPCVM sur 3 ans à partir de donn�
 - Limites API : Yahoo Finance peut limiter le nombre de requêtes
 
 ![equation](https://latex.codecogs.com/svg.latex?\text{Perf}%20=%20\frac{\text{Prix%20final}%20-%20\text{Prix%20initial}}{\text{Prix%20initial}}%20\times%20100)
-
+https://latex.codecogs.com/svg.latex?%5Ctext%7BPerf%7D%20=%20%5Cfrac%7B%5Ctext%7BPrix%20final%7D%20-%20%5Ctext%7BPrix%20initial%7D%7D%7B%5Ctext%7BPrix%20initial%7D%7D%20%5Ctimes%20100
