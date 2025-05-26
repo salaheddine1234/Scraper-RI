@@ -28,9 +28,6 @@ Analyse automatisée de la performance d’un OPCVM sur 3 ans à partir de donn�
 - Limites API : Yahoo Finance peut limiter le nombre de requêtes
 
 \text{Performance (\%)} = \frac{\text{Prix final} - \text{Prix initial}}{\text{Prix initial}} \times 100
-r_t = \frac{P_t}{P_{t-1}} - 1
-\sigma_{ann} = \text{Écart-type}(r) \times \sqrt{252} \times 100
-\mu_{ann} = \text{Moyenne}(r) \times 252 \times 100
-\text{Max Drawdown (\%)} = \max\left(\frac{\text{Creux} - \text{Pic}}{\text{Pic}}\right) \times 100
+
 
 
